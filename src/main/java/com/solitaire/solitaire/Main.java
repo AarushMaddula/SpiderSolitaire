@@ -30,9 +30,10 @@ public class Main extends Application {
 
         gameStage = stage;
 
-        SpiderSolitaire game = new SpiderSolitaire("28.h10s01h05h11H11S11S10S09H06|h03h13h08h09h02H07H06H05H04S13|s12h08s11h02h12H02H01H06|s07s05s05H11H10S09S05S04S03S02S01|h02S11S05S04S03S02S01|h13h13S02H01|h01s08s07H13H12H11H10H09H01|h05s07h03h06H07S06H05S13S12S11S10S09||h03s03S13H04|s12h10s02s08s06h03s06h12h09s04|h09h07s08h04s12s03s10s08h07s04|h08s07s10h08s13h12h04s01s06s09|8");
+        SpiderSolitaire game = new SpiderSolitaire();
 
-        Group root = displayCards(game, stage);
+        Group root = new Group();
+        displayCards(game, root);
         Scene scene = new Scene(root, 600, 800);
 
         scene.setFill(Color.DARKGREEN);
@@ -52,10 +53,22 @@ public class Main extends Application {
 
     private double startX, startY;
 
-    public Group displayCards(SpiderSolitaire game, Stage stage) {
+    public void displayCards(SpiderSolitaire game, Group root) {
         //display piles
         ArrayList<List<Card>> piles = game.getPiles();
-        Group group = new Group();
+
+        int numChildren = root.getChildren().size();
+        int count = 0;
+
+        //removes all pieces from root
+
+        for (int i = 0; i < numChildren; i++) {
+            if (root.getChildren().get(count).getClass() == ImageView.class) {
+                root.getChildren().remove(count);
+            } else {
+                count++;
+            }
+        }
 
         int x = 50;
         int y = 200;
@@ -84,7 +97,7 @@ public class Main extends Application {
                 imageView.setFitWidth(75);
 
                 imageView.setSmooth(true);
-                group.getChildren().add(imageView);
+                root.getChildren().add(imageView);
                 imageViews[card.getId()] = imageView;
 
                 imageView.setOnMousePressed(e-> {
@@ -151,11 +164,7 @@ public class Main extends Application {
                     if (valid) {
                         game.makeMove(card, pileStack - 1);
 
-                        Group root = displayCards(game, stage);
-                        Scene scene = new Scene(root, 600, 800);
-                        scene.setFill(Color.DARKGREEN);
-
-                        gameStage.setScene(scene);
+                        displayCards(game, root);
 
                         return;
                     }
@@ -216,15 +225,11 @@ public class Main extends Application {
 
                 game.getStock().remove(0);
 
-                Group root = displayCards(game, stage);
-                Scene scene = new Scene(root, 600, 800);
-                scene.setFill(Color.DARKGREEN);
-
-                gameStage.setScene(scene);
+                displayCards(game, root);
             });
 
             imageView.setSmooth(true);
-            group.getChildren().add(imageView);
+            root.getChildren().add(imageView);
 
             x2 += 20;
         }
@@ -243,13 +248,11 @@ public class Main extends Application {
             imageView.setFitWidth(75);
 
             imageView.setSmooth(true);
-            group.getChildren().add(imageView);
+            root.getChildren().add(imageView);
             imageViews[card.getId()] = imageView;
 
             xP += 85;
         }
-
-        return group;
     }
 
     public static void main(String[] args) {

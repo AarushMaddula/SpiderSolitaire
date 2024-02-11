@@ -75,6 +75,8 @@ public class SpiderSolitaire {
 
         turn = 0;
 
+        foundation = new ArrayList<>();
+
         moves = new ArrayList<>();
 
         System.out.println(getBoardState());
@@ -217,8 +219,6 @@ public class SpiderSolitaire {
             boardState.append("|");
         }
 
-        foundation = new ArrayList<>();
-
         int num = 8;
 
         for (Card card: foundation) {
@@ -343,7 +343,6 @@ public class SpiderSolitaire {
                     prevRank = card.getRank();
 
                     if (card.getRank() == 1) {
-                        startedCount = false;
 
                         Card kCard = pile.get(startOrder);
                         foundation.add(kCard);
